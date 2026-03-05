@@ -198,7 +198,8 @@ iagtm-agent/
 ├── proof-of-work/         ← Artifacts per issue number
 │   └── <issue-number>/
 ├── docs/
-│   └── n8n-mcp-config.json
+│   ├── n8n-mcp-config.json
+│   └── service-logins.md   ← How to authenticate to each external service
 └── .claude/
     └── commands/          ← Slash commands for Claude Code
         ├── execute-task.md
