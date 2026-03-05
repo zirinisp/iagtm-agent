@@ -59,7 +59,7 @@ Skills take precedence over general reasoning. If a skill exists for the task ty
 ### Skills Subrepo
 The skills library is a Git submodule pointing to the real skills repository:
 ```
-agent-system/
+iagtm-agent/
 └── skills/          ← git submodule: github.com/zirinisp/iagtm-skills
 ```
 
@@ -168,7 +168,7 @@ Asana is the source of truth for task status. Rules:
 
 | Issue | Workaround |
 |-------|-----------|
-| n8n MCP Node version | Use bash wrapper to force Node 20 (see setup.md) |
+| n8n MCP Node version | Use bash wrapper to force Node 20 (see setup/setup.sh) |
 | Chrome extension pairing conflict | Extension disabled on MacBook; Playwright used on Mac Mini |
 | MCP rate limiting (429) | Wait 3+ minutes before retrying after repeated failures |
 
@@ -189,9 +189,11 @@ When in doubt: **do less, document more.**
 ## 11. Directory Structure
 
 ```
-agent-system/
+iagtm-agent/
 ├── CLAUDE.md              ← This file
-├── setup.sh               ← Bootstrap script (run once on fresh machine)
+├── .gitignore
+├── setup/                 ← Setup-related files
+│   └── setup.sh           ← Bootstrap script (run once on fresh machine)
 ├── skills/                ← Git submodule: github.com/zirinisp/iagtm-skills
 ├── proof-of-work/         ← Artifacts per issue number
 │   └── <issue-number>/
@@ -199,6 +201,9 @@ agent-system/
 │   └── n8n-mcp-config.json
 └── .claude/
     └── commands/          ← Slash commands for Claude Code
+        ├── execute-task.md
+        ├── proof-of-work.md
+        └── check-tasks.md
 ```
 
 ---
@@ -217,7 +222,7 @@ These are defined in `.claude/commands/` and available during sessions:
 
 ## 13. Bootstrap
 
-Run `bash setup.sh` once on a fresh machine. It:
+Run `bash setup/setup.sh` once on a fresh machine. It:
 - Verifies Node v20 is active
 - Checks required CLI tools (git, gh, node, npx, claude)
 - Clones the skills subrepo

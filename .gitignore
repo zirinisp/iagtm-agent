@@ -1,0 +1,16 @@
+# Proof-of-work artifacts
+proof-of-work/**/
+!proof-of-work/.gitkeep
+
+# Environment and secrets
+.env
+.env.*
+*.token
+credentials.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/

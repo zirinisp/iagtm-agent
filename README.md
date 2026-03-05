@@ -10,7 +10,7 @@ Clone with submodules:
 ```bash
 git clone --recurse-submodules https://github.com/zirinisp/iagtm-agent.git
 cd iagtm-agent
-bash setup.sh
+bash setup/setup.sh
 ```
 
 If you already cloned without `--recurse-submodules`:
