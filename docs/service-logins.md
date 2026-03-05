@@ -38,22 +38,24 @@ How the agent authenticates to each external service. **No passwords are stored 
 - **Account**: `paz.n8n@gmail.com` (Michael AI, 6 shops)
 - **How to re-login**:
   1. Navigate to https://merchants.ubereats.com/manager/ (redirects to auth.uber.com)
-  2. Enter `paz.n8n@gmail.com` and click "Continue"
-  3. Page shows "Your social account is connected" with options:
-     - **Option A**: "Continue with Google" — opens popup (may not work in Playwright)
-     - **Option B**: "Login with email" — sends 4-digit OTP to `paz.n8n@gmail.com`
-  4. Enter OTP code
+  2. Login page now asks "What's your phone number or email?" with options:
+     - Enter email + "Continue" → proceeds to password/OTP step
+     - **"Continue with Google"** — opens popup (may not work in Playwright)
+     - **"Continue with Apple"** — Apple SSO option
+  3. After entering email, page may show "Your social account is connected" with Google SSO
+  4. Enter OTP code if using email login method
 - **Logout**: Click "MA" avatar (top right) > "Log out"
-- **Automated re-login flow** (via Playwright):
+- **Automated re-login flow** (via Playwright — WORKING as of 5 March 2026):
   1. Navigate to https://merchants.ubereats.com/manager/ (redirects to auth.uber.com)
   2. Fill email `paz.n8n@gmail.com`, click "Continue"
-  3. Click "Login with email" (sends 4-digit OTP)
-  4. Open Gmail in browser: `https://mail.google.com/mail/u/0/#search/from%3Auber+newer_than%3A1h`
-  5. Read the OTP code from the email
-  6. Navigate back to auth.uber.com, enter the 4 digits
-  7. Page shows "Welcome back, Michael" — click "Continue with Google"
-  8. **BLOCKER**: Google SSO opens a popup that Playwright cannot handle
-- **Note**: The full automated flow gets stuck at the final Google SSO popup step. If session expires, the quickest fix is to manually click "Continue with Google" in Chrome on Paddington. The OTP+email step can be automated (read OTP from Gmail browser), but the final Google popup cannot.
+  3. Click "Login with email" (sends 4-digit OTP to paz.n8n@gmail.com)
+  4. Navigate to Gmail: `https://mail.google.com/mail/u/0/#search/from%3Auber+newer_than%3A1h`
+  5. Open the latest "Your Uber account verification code" email, read the 4-digit code
+  6. Navigate back to auth.uber.com (page resets — enter email again, click Continue, click "Login with email" to trigger another OTP)
+  7. Read the NEW OTP from Gmail (or try the previous code — Uber sometimes accepts recent codes)
+  8. Enter the 4 digits one by one in the OTP fields — auto-submits and redirects to dashboard
+  9. **NO Google SSO popup needed** — the OTP flow completes login directly
+- **Key insight**: The OTP "Login with email" path bypasses the Google SSO popup entirely. No manual intervention needed. The previous blocker (Google SSO popup) only applies if you click "Continue with Google".
 
 ## 5. Uber Ads Manager
 - **Method**: Shares authentication with Uber Eats Manager (same Uber account)
@@ -105,6 +107,36 @@ How the agent authenticates to each external service. **No passwords are stored 
   5. Redirects to /home with "Welcome Michael!" dashboard
 - **Note**: "Continue with Google" returns "We couldn't find your account" — must use email/password
 
+## 9. Xero (Accounting)
+- **Method**: Email/password (NO Google SSO — Xero uses its own authentication)
+- **URL**: https://go.xero.com (redirects to https://login.xero.com)
+- **Login page**: https://login.xero.com/identity/user/login
+- **Account**: TBD — credentials not yet stored in Keychain
+- **Keychain service**: `xero` (to be created)
+- **How to re-login**:
+  1. Navigate to https://go.xero.com (redirects to login.xero.com)
+  2. Fill "Email address" with the account email
+  3. Fill "Password" with the password
+  4. Click "Log in"
+- **Note**: Xero is the accounting source of truth for IAGTM (P&L, balance sheet, payroll, VAT). Credentials need to be obtained from the business owner and stored in Keychain before automated access is possible.
+- **Deputy integration**: Deputy's login page has a "Login with Xero" option, suggesting there may be a Deputy ↔ Xero integration for payroll/timesheets.
+
+## 10. Figma (Design)
+- **Method**: MCP integration (Claude AI Figma)
+- **Account**: info@paz-labs.com (Pantelis Zirinis), Pro plan, Collab seat
+- **Verify**: Call `mcp__claude_ai_Figma__whoami`
+- **Note**: Connected via MCP. No browser login needed.
+
+## 11. Canva (Design)
+- **Method**: MCP integration (Claude AI Canva)
+- **Account**: Connected but no brand kits configured
+- **Verify**: Call `mcp__claude_ai_Canva__list-brand-kits`
+- **Note**: Connected via MCP but appears to be a fresh/empty account.
+
+## 12. Feedr (Corporate Catering)
+- **Method**: Unknown — appears as a payment method in Lightspeed POS
+- **Note**: Feedr orders appear as "Feedr #STR1-RCK-XXXXXX CC" and "Feedr #STR2-RCK-XXXXXX CC" in Lightspeed. This is a corporate catering channel that now represents ~20% of revenue for some locations. No separate login documented — orders flow through Lightspeed.
+
 ---
 
 ## Credential Storage
@@ -141,6 +173,6 @@ Chrome on Paddington is signed into `paz.n8n@gmail.com` — Gmail works via Play
 
 ## Known Limitations
 
-- **Uber login**: OTP step works via Playwright (read code from Gmail browser). But the final Google SSO step opens a popup that Playwright can't handle. Requires manual click in Chrome if session expires.
+- **Uber login**: RESOLVED — Use "Login with email" OTP flow (not Google SSO). Enter email → Continue → "Login with email" → read OTP from Gmail browser → enter digits. Bypasses Google SSO popup entirely. Fully automatable via Playwright.
 - **Asana plugin MCP**: Token expires periodically. The Claude AI Asana MCP works as a reliable fallback.
 - **Gmail MCP**: Connected to `info@paz-labs.com`. For `paz.n8n@gmail.com` emails, use browser Gmail via Playwright.
