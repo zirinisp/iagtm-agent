@@ -1,0 +1,4 @@
+[submodule "skills"]
+	path = skills
+	url = https://github.com/zirinisp/iagtm-skills.git
+	branch = main

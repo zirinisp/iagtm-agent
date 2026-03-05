@@ -1,6 +1,8 @@
-# Agent System — Claude Code Context
+# CLAUDE.md
 
-> This file is the primary context document for Claude Code running on Mac Mini "Paddington".
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+> This is the primary context document for Claude Code running on Mac Mini "Paddington".
 > Read this fully before starting any task. All behaviour, routing, and workflow decisions derive from here.
 
 ---
@@ -181,3 +183,43 @@ A well-executed task ends with:
 4. No open questions or incomplete sub-tasks
 
 When in doubt: **do less, document more.**
+
+---
+
+## 11. Directory Structure
+
+```
+agent-system/
+├── CLAUDE.md              ← This file
+├── setup.sh               ← Bootstrap script (run once on fresh machine)
+├── skills/                ← Git submodule: github.com/zirinisp/iagtm-skills
+├── proof-of-work/         ← Artifacts per issue number
+│   └── <issue-number>/
+├── docs/
+│   └── n8n-mcp-config.json
+└── .claude/
+    └── commands/          ← Slash commands for Claude Code
+```
+
+---
+
+## 12. Slash Commands
+
+These are defined in `.claude/commands/` and available during sessions:
+
+| Command | Purpose |
+|---------|---------|
+| `/execute-task <issue-number>` | Full task execution workflow: read issue, plan, execute, proof, report, close |
+| `/proof-of-work` | Generate a structured proof-of-work summary for the current task |
+| `/check-tasks` | Query Asana for assigned tasks and sync status with GitHub Issues |
+
+---
+
+## 13. Bootstrap
+
+Run `bash setup.sh` once on a fresh machine. It:
+- Verifies Node v20 is active
+- Checks required CLI tools (git, gh, node, npx, claude)
+- Clones the skills subrepo
+- Creates the `proof-of-work/` and `.claude/commands/` directories
+- Writes the n8n MCP config snippet to `docs/`

@@ -1,14 +1,26 @@
-# Skills
+# iagtm-agent
 
-This directory is a Git submodule pointing to:
-**https://github.com/zirinisp/iagtm-skills**
+Autonomous agent system running on Mac Mini "Paddington". Tasks flow from Asana through GitHub Issues to Claude Code and Cursor Cloud for execution, with proof-of-work artifacts documenting every action.
 
-Do not edit files here directly. All skill changes should be made in the skills repo and pulled in via:
+See [CLAUDE.md](CLAUDE.md) for full operational guidance, skills routing, and workflow details.
+
+## Quick Start
+
+Clone with submodules:
 ```bash
-git submodule update --remote --merge skills
+git clone --recurse-submodules https://github.com/zirinisp/iagtm-agent.git
+cd iagtm-agent
+bash setup.sh
 ```
 
-To initialise after a fresh clone:
+If you already cloned without `--recurse-submodules`:
 ```bash
 git submodule update --init --recursive
+```
+
+## Updating Skills
+
+The `skills/` directory is a git submodule tracking [iagtm-skills](https://github.com/zirinisp/iagtm-skills). To pull the latest:
+```bash
+git submodule update --remote --merge skills
 ```
