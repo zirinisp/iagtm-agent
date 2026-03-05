@@ -112,7 +112,9 @@ How the agent authenticates to each external service. **No passwords are stored 
 - **URL**: https://go.xero.com (redirects to dashboard at `go.xero.com/app/!kh5BZ/homepage`)
 - **Login page**: https://login.xero.com/identity/user/login
 - **Account**: paz.n8n@gmail.com / Password: `AUto1234..`
-- **Organisation**: Greek Restaurant Ltd (GRL), org ID: `!kh5BZ`
+- **Two organisations** (same login, switch via org selector):
+  - **Greek Restaurant Ltd (GRL)** — org ID: `!kh5BZ` — manages **Paddington** branch
+  - **Pagema Ltd (PL)** — org ID: `!0GC7T` — manages **all dark kitchens** (Shoreditch, Brent, Wandsworth, Peckham, Chiswick)
 - **Fiscal year**: August 1 – July 31
 - **How to re-login**:
   1. Navigate to https://go.xero.com (redirects to login.xero.com)
@@ -128,7 +130,7 @@ How the agent authenticates to each external service. **No passwords are stored 
   - All reports: `reporting.xero.com/!kh5BZ`
   - Business snapshot: `go.xero.com/app/!kh5BZ/business-snapshot/`
 - **Custom P&L reports**: Profit and Loss - Official - Taxd, No Shareholder, Official - Barclays, Tracking Allocations and Expenses, Official
-- **Note**: Xero is the accounting source of truth for IAGTM. The TOTP requirement means automated login needs Apple Passwords integration or manual 2FA code entry.
+- **Note**: Xero is the accounting source of truth for IAGTM. Two companies = two separate P&Ls that must be combined for a full business view. The TOTP requirement means automated login needs Apple Passwords integration or manual 2FA code entry.
 - **Deputy integration**: Deputy's login page has a "Login with Xero" option, suggesting there may be a Deputy ↔ Xero integration for payroll/timesheets.
 
 ## 10. Figma (Design)
