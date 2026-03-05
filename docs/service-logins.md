@@ -60,6 +60,8 @@ How the agent authenticates to each external service. **No passwords are stored 
 - **URL**: https://advertiser.uber.com
 - **Account**: IAGTM UK (Ad Account ID: `77f96be0-b32c-4927-8ae6-77e29397cf1a`)
 - **How to re-login**: Same as Uber Eats Manager — logging into one logs into both
+- **Tested**: Logging out of Uber Ads (`auth.uber.com/login/logout`) and navigating back shows the identical auth.uber.com flow (email → "Continue with Google" popup). Same Google SSO popup limitation applies.
+- **Logout URL**: `https://auth.uber.com/login/logout?next_url=advertiser.uber.com`
 
 ## 6. Deputy
 - **Method**: Google SSO via `paz.n8n@gmail.com`
