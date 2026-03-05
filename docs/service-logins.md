@@ -108,17 +108,27 @@ How the agent authenticates to each external service. **No passwords are stored 
 - **Note**: "Continue with Google" returns "We couldn't find your account" — must use email/password
 
 ## 9. Xero (Accounting)
-- **Method**: Email/password (NO Google SSO — Xero uses its own authentication)
-- **URL**: https://go.xero.com (redirects to https://login.xero.com)
+- **Method**: Email/password + TOTP (Apple Passwords generates the one-time code)
+- **URL**: https://go.xero.com (redirects to dashboard at `go.xero.com/app/!kh5BZ/homepage`)
 - **Login page**: https://login.xero.com/identity/user/login
-- **Account**: TBD — credentials not yet stored in Keychain
-- **Keychain service**: `xero` (to be created)
+- **Account**: paz.n8n@gmail.com / Password: `AUto1234..`
+- **Organisation**: Greek Restaurant Ltd (GRL), org ID: `!kh5BZ`
+- **Fiscal year**: August 1 – July 31
 - **How to re-login**:
   1. Navigate to https://go.xero.com (redirects to login.xero.com)
-  2. Fill "Email address" with the account email
-  3. Fill "Password" with the password
+  2. Fill "Email address" with `paz.n8n@gmail.com`
+  3. Fill "Password" with `AUto1234..`
   4. Click "Log in"
-- **Note**: Xero is the accounting source of truth for IAGTM (P&L, balance sheet, payroll, VAT). Credentials need to be obtained from the business owner and stored in Keychain before automated access is possible.
+  5. Enter TOTP code from Apple Passwords (Settings → Passwords → Xero)
+- **Navigation**: Home, Sales (Sales overview, Invoices, Quotes, Customers), Purchases (Purchases overview, Bills, Purchase orders, Expenses, Suppliers), Reporting (All reports, Favourites: Aged Payables/Receivables, Balance Sheet, P&L, VAT Return, Business snapshot), Accounting (Bank accounts, Fixed assets), Contacts, Projects
+- **Key report URLs**:
+  - P&L: `reporting.xero.com/!kh5BZ/v2/Run/New/1216`
+  - Balance Sheet: `reporting.xero.com/!kh5BZ/v2/Run/New/1217`
+  - VAT Return: `reporting.xero.com/!kh5BZ/v2/Run/New/d74c356f-64db-4251-a00b-bdf429e3c01b`
+  - All reports: `reporting.xero.com/!kh5BZ`
+  - Business snapshot: `go.xero.com/app/!kh5BZ/business-snapshot/`
+- **Custom P&L reports**: Profit and Loss - Official - Taxd, No Shareholder, Official - Barclays, Tracking Allocations and Expenses, Official
+- **Note**: Xero is the accounting source of truth for IAGTM. The TOTP requirement means automated login needs Apple Passwords integration or manual 2FA code entry.
 - **Deputy integration**: Deputy's login page has a "Login with Xero" option, suggesting there may be a Deputy ↔ Xero integration for payroll/timesheets.
 
 ## 10. Figma (Design)
