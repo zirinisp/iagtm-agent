@@ -7,6 +7,7 @@ proof-of-work/**/
 .env.*
 *.token
 credentials.json
+.mcp.json
 
 # OS files
 .DS_Store

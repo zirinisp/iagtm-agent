@@ -194,6 +194,7 @@ Routing decisions are logged in the GitHub Issue.
 
 Asana is the source of truth for task status. Rules:
 
+- **Always use the project-local Asana MCP (`mcp__asana__*`)** — never use the global cloud plugins (`mcp__claude_ai_Asana__*` or `mcp__plugin_asana_asana__*`) unless explicitly instructed. The global plugins may be authenticated with a different account.
 - **Never mark a task complete in Asana without proof artifacts**
 - Use the Asana MCP to read task details, not just the GitHub Issue
 - Custom fields on Asana tasks may contain routing hints (e.g., `agent: claude-code`)

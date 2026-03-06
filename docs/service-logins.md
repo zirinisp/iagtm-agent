@@ -11,11 +11,14 @@ How the agent authenticates to each external service. **No passwords are stored 
 - **Re-login**: `gh auth login`
 
 ## 2. Asana
-- **Method**: MCP integration (Claude AI Asana) + Chrome (Google SSO)
+- **Method**: MCP integration (multiple options) + Chrome (Google SSO)
 - **URL**: https://app.asana.com
-- **Account**: Auto-logged in via Google (`paz.n8n@gmail.com`)
+- **Account**: Michael AI (`paz.n8n@gmail.com`)
 - **Verify**: Navigate to https://app.asana.com — should auto-login
-- **MCP tools**: `mcp__claude_ai_Asana__*` (primary), `mcp__plugin_asana_asana__*` (may need periodic re-auth)
+- **MCP tools**:
+  - **USE THIS:** `mcp__asana__*` — Project-local MCP server (`.mcp.json`). Uses PAT for `paz.n8n@gmail.com` (IAGTM workspace). Always available, no re-auth needed.
+  - **DO NOT USE** (unless explicitly instructed): `mcp__claude_ai_Asana__*` and `mcp__plugin_asana_asana__*` — Global cloud plugins (account-level). These may be authenticated with a different Asana account (e.g., personal) and should never be used for IAGTM work.
+- **PAT**: Stored in `.mcp.json` (project root). Token belongs to Michael AI (`paz.n8n@gmail.com`).
 
 ## 3. Lightspeed POS (K-Series)
 - **Method**: Lightspeed ID (email/password) — Chrome saves credentials
