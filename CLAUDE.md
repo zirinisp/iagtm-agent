@@ -70,7 +70,7 @@ Domain skills take precedence over general reasoning. If a skill exists for the 
 | `iagtm-staff-scheduler` | Scheduling, shifts, rosters, Deputy, labour costs |
 | `iagtm-finance` | Revenue, P&L, profit, financial reports, cross-system consolidation |
 | `skill-monitor` | Skill health checks, improvement reviews |
-| `skill-creator` | Creating new skills |
+| `skill-creator` | Creating new skills (official Anthropic plugin — not in subrepo) |
 
 ### Available Workflow Skills
 
@@ -246,7 +246,7 @@ iagtm-agent/
         ├── iagtm-staff-scheduler/ → symlink to ../../skills/iagtm-staff-scheduler
         ├── iagtm-finance/       → symlink to ../../skills/iagtm-finance
         ├── skill-monitor/       → symlink to ../../skills/skill-monitor
-        ├── skill-creator/       → symlink to ../../skills/skill-creator
+        ├── (skill-creator is provided by the official Anthropic plugin, not in subrepo)
         ├── execute-task/        ← Workflow skill (committed)
         ├── proof-of-work/       ← Workflow skill (committed)
         ├── check-tasks/         ← Workflow skill (committed)
