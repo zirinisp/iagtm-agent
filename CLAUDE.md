@@ -79,6 +79,8 @@ Domain skills take precedence over general reasoning. If a skill exists for the 
 | `/execute-task <issue-number>` | Full task execution workflow: read issue, plan, execute, proof, report, close |
 | `/proof-of-work` | Generate a structured proof-of-work summary for the current task |
 | `/check-tasks` | Query Asana for assigned tasks and sync status with GitHub Issues |
+| `/commit` | Stage and commit changes in both agent repo and skills subrepo (does not push) |
+| `/commit-push` | Stage, commit, and push changes in both repos to remote |
 
 ### Skills Subrepo
 
@@ -247,7 +249,9 @@ iagtm-agent/
         ├── skill-creator/       → symlink to ../../skills/skill-creator
         ├── execute-task/        ← Workflow skill (committed)
         ├── proof-of-work/       ← Workflow skill (committed)
-        └── check-tasks/         ← Workflow skill (committed)
+        ├── check-tasks/         ← Workflow skill (committed)
+        ├── commit/              ← Workflow skill (committed)
+        └── commit-push/         ← Workflow skill (committed)
 ```
 
 ---
