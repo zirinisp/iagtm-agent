@@ -65,6 +65,7 @@ Domain skills take precedence over general reasoning. If a skill exists for the 
 |-------|------------|
 | `iagtm-menu` | Menu items, pricing, categories, Deliverect, Lightspeed POS, Uber Eats menus |
 | `iagtm-inventory` | Stock levels, suppliers, purchasing, Marketman, food cost |
+| `iagtm-avt` | Actual vs Theoretical variance, inventory accuracy, recipe errors, counting errors |
 | `iagtm-uber-marketing` | Uber Eats ads, campaigns, ROAS, ad spend, offers, promotions |
 | `iagtm-menu-photographer` | Food photos, menu images, photography specs |
 | `iagtm-staff-scheduler` | Scheduling, shifts, rosters, Deputy, labour costs |
@@ -273,6 +274,7 @@ iagtm-agent/
     └── skills/            ← Claude Code skill discovery directory
         ├── iagtm-menu/          → symlink to ../../skills/iagtm-menu
         ├── iagtm-inventory/     → symlink to ../../skills/iagtm-inventory
+        ├── iagtm-avt/           → symlink to ../../skills/iagtm-avt
         ├── iagtm-uber-marketing/ → symlink to ../../skills/iagtm-uber-marketing
         ├── iagtm-menu-photographer/ → symlink to ../../skills/iagtm-menu-photographer
         ├── iagtm-staff-scheduler/ → symlink to ../../skills/iagtm-staff-scheduler

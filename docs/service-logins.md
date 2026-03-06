@@ -81,18 +81,24 @@ How the agent authenticates to each external service. **No passwords are stored 
   5. Redirects to https://c4cae802074915.uk.deputy.com/#/
 
 ## 7. Marketman
-- **Method**: Username/password
+- **Method**: Username/password (browser) or API (programmatic)
 - **URL**: https://buyer.marketman.com
 - **Login page**: https://buyer.marketman.com/Login.html
-- **Keychain service**: `marketman-buyer`
-- **Retrieve credentials**: `security find-generic-password -s "marketman-buyer" -w`
+- **Keychain service (browser)**: `marketman-buyer`
+- **Retrieve browser credentials**: `security find-generic-password -s "marketman-buyer" -w`
 - **Account username**: `Michael_AI`
-- **How to re-login**:
+- **How to re-login (browser)**:
   1. Navigate to https://buyer.marketman.com
   2. Fill "User Name" with `Michael_AI`
   3. Fill "Password" from Keychain
   4. Click "Login"
   5. Redirects to /Views/Default dashboard
+- **API access**:
+  - **Keychain service (API)**: `marketman-api`
+  - **Retrieve API credentials**: `security find-generic-password -s "marketman-api" -w` (returns JSON with APIKey and APIPassword)
+  - **Auth endpoint**: `POST https://api.marketman.com/v3/buyers/auth/GetToken` → returns token valid ~7 days
+  - **Get accounts**: `POST https://api.marketman.com/v3/buyers/partneraccounts/GetAuthorisedAccounts`
+  - **API limit**: 500 calls per 24 hours
 
 ## 8. Deliverect
 - **Method**: Email/password (Google SSO does NOT work for this account)
