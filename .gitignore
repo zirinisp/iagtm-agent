@@ -21,3 +21,6 @@ Thumbs.db
 # Node
 node_modules/
 .playwright-mcp/
+
+# Chrome agent profiles (managed outside repo)
+chrome-agent-profiles/
