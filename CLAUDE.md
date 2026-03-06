@@ -176,7 +176,7 @@ After completion, post a summary comment on the GitHub Issue with artifact links
 | Asana | Task management | MCP: `https://mcp.asana.com/v2/mcp` |
 | GitHub | Issue tracking + code | Standard git + GH CLI |
 | n8n | Workflow automation | `https://n8n-mcp-michael.paz-labs.com/mcp` |
-| Playwright | Browser control | Local via MCP |
+| Playwright | Browser control | CDP via `http://localhost:9222` (multi-agent) |
 
 ### Node.js
 Always use Node v20. If running npx commands:
@@ -184,9 +184,39 @@ Always use Node v20. If running npx commands:
 export PATH=/Users/michaelai/.nvm/versions/node/v20.19.4/bin:$PATH
 ```
 
+### Browser Access — CDP Multi-Agent Architecture
+
+Multiple agents can use the browser simultaneously via Chrome DevTools Protocol (CDP). This replaces the old `--extension` mode which only supported one agent at a time.
+
+**How it works:**
+- A dedicated Chrome instance runs with `--remote-debugging-port=9222` using a cloned copy of the user's Chrome profile
+- All login sessions are preserved from the user's Chrome
+- Each agent connects via `--cdp-endpoint http://localhost:9222` and gets its own tab
+- Agents work independently — no interference between tabs
+
+**Before doing any browser work:**
+1. Check CDP Chrome is running: `bash setup/chrome-cdp.sh status`
+2. If not running: `bash setup/chrome-cdp.sh start`
+3. If sessions have expired: ask the user to log in on their Chrome, then `bash setup/chrome-cdp.sh sync`
+
+**Key rules:**
+- **Never use `--extension` mode** — use `--cdp-endpoint` via the project `.mcp.json`
+- The global Playwright plugin (which uses `--extension`) is for the user's personal use only
+- If CDP Chrome is not running, start it yourself — don't fall back to extension mode
+- The user's normal Chrome is separate and should not be controlled by agents
+
+**Commands:**
+```bash
+bash setup/chrome-cdp.sh start    # Launch CDP Chrome (syncs profile if needed)
+bash setup/chrome-cdp.sh stop     # Stop CDP Chrome
+bash setup/chrome-cdp.sh sync     # Re-sync profile from user's Chrome
+bash setup/chrome-cdp.sh status   # Check status
+bash setup/chrome-cdp.sh restart  # Stop, sync, restart
+```
+
 ### Chrome Extension Note
 The Claude Desktop Chrome extension is **disabled on MacBook** to prevent pairing conflicts.
-Playwright on Mac Mini controls Chrome directly — do not rely on the Chrome extension for automation.
+Playwright on Mac Mini uses CDP mode for multi-agent access — do not use extension mode.
 
 ---
 
@@ -239,8 +269,11 @@ Asana is the source of truth for task status. Rules:
 | Issue | Workaround |
 |-------|-----------|
 | n8n MCP Node version | Use bash wrapper to force Node 20 (see setup/setup.sh) |
-| Chrome extension pairing conflict | Extension disabled on MacBook; Playwright used on Mac Mini |
+| Chrome extension pairing conflict | Extension disabled on MacBook; CDP mode used on Mac Mini |
 | MCP rate limiting (429) | Wait 3+ minutes before retrying after repeated failures |
+| Uber Eats sessions expire quickly | Use email OTP re-login flow (automated — see services.md) |
+| CDP Chrome not running | Run `bash setup/chrome-cdp.sh start` before browser work |
+| Sessions expired in CDP Chrome | Ask user to log in on their Chrome, then run `bash setup/chrome-cdp.sh sync` |
 
 ---
 
@@ -263,7 +296,8 @@ iagtm-agent/
 ├── CLAUDE.md              ← This file
 ├── .gitignore
 ├── setup/
-│   └── setup.sh           ← Bootstrap script (creates symlinks + directories)
+│   ├── setup.sh           ← Bootstrap script (creates symlinks + directories)
+│   └── chrome-cdp.sh      ← Chrome CDP lifecycle manager (multi-agent browser)
 ├── skills/                ← Git submodule: github.com/zirinisp/iagtm-skills
 ├── proof-of-work/         ← Artifacts per issue number
 │   └── <issue-number>/
@@ -299,3 +333,8 @@ Run `bash setup/setup.sh` once on a fresh machine. It:
 - Creates symlinks in `.claude/skills/` so Claude Code discovers all domain skills
 - Creates the `proof-of-work/` directory
 - Writes the n8n MCP config snippet to `docs/`
+
+After setup, start the CDP Chrome for multi-agent browser access:
+```bash
+bash setup/chrome-cdp.sh start
+```
