@@ -70,7 +70,7 @@ Domain skills take precedence over general reasoning. If a skill exists for the 
 | `iagtm-staff-scheduler` | Scheduling, shifts, rosters, Deputy, labour costs |
 | `iagtm-finance` | Revenue, P&L, profit, financial reports, cross-system consolidation |
 | `skill-monitor` | Skill health checks, improvement reviews |
-| `skill-creator` | Creating new skills (official Anthropic plugin — not in subrepo) |
+| `skill-creator` | Creating new skills (official Anthropic plugin — see custom instructions below) |
 
 ### Available Workflow Skills
 
@@ -81,6 +81,37 @@ Domain skills take precedence over general reasoning. If a skill exists for the 
 | `/check-tasks` | Query Asana for assigned tasks and sync status with GitHub Issues |
 | `/commit` | Stage and commit changes in both agent repo and skills subrepo (does not push) |
 | `/commit-push` | Stage, commit, and push changes in both repos to remote |
+
+### Skill Creator — Custom Instructions
+
+The `skill-creator` plugin (official Anthropic plugin) is installed globally. When creating or modifying IAGTM domain skills, follow these rules:
+
+1. **Write skills to the subrepo, not `.claude/skills/`**
+   - New domain skills go in `./skills/<skill-name>/SKILL.md` (the git submodule)
+   - Then create a symlink: `ln -sfn ../../skills/<skill-name> .claude/skills/<skill-name>`
+   - This keeps the subrepo as the single source of truth
+
+2. **Follow the existing naming convention**
+   - Skill directories are prefixed with `iagtm-` (e.g., `iagtm-menu`, `iagtm-finance`)
+   - The SKILL.md `name` field matches the directory name
+
+3. **Eval workspaces go outside the subrepo**
+   - The skill-creator puts workspaces at `<skill-name>-workspace/` — ensure these are siblings of the skill directory, not inside the subrepo
+   - Add workspace directories to `.gitignore` if needed
+
+4. **Commit to both repos when done**
+   - Use `/commit` or `/commit-push` to handle both the agent repo and the skills subrepo
+   - The subrepo has its own git history at `github.com/zirinisp/iagtm-skills`
+
+5. **Workflow skills stay in `.claude/skills/` directly**
+   - Only domain/operational skills go in the subrepo
+   - Workflow skills (like `execute-task`, `proof-of-work`, `commit`) are committed directly to `.claude/skills/`
+
+6. **Description style**
+   - Include "IAGTM (It's All Greek To Me)" in descriptions for brand context
+   - List specific trigger keywords relevant to the domain
+   - Reference the 6 London locations where applicable
+   - Be "pushy" with triggers as the plugin recommends — list concrete keywords
 
 ### Skills Subrepo
 
