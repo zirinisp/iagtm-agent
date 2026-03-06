@@ -70,6 +70,7 @@ Domain skills take precedence over general reasoning. If a skill exists for the 
 | `iagtm-menu-photographer` | Food photos, menu images, photography specs |
 | `iagtm-staff-scheduler` | Scheduling, shifts, rosters, Deputy, labour costs |
 | `iagtm-finance` | Revenue, P&L, profit, financial reports, cross-system consolidation |
+| `iagtm-asana` | Asana tasks, projects, sections, attachments, custom fields, tags, API, task lifecycle |
 | `skill-monitor` | Skill health checks, improvement reviews |
 | `skill-creator` | Creating new skills (official Anthropic plugin — see custom instructions below) |
 
@@ -256,7 +257,10 @@ Routing decisions are logged in the GitHub Issue.
 
 Asana is the source of truth for task status. Rules:
 
-- **Always use the project-local Asana MCP (`mcp__asana__*`)** — never use the global cloud plugins (`mcp__claude_ai_Asana__*` or `mcp__plugin_asana_asana__*`) unless explicitly instructed. The global plugins may be authenticated with a different account.
+- **Prefer the project-local Asana MCP (`mcp__asana__*`)** for all standard operations (tasks, projects, search, comments, dependencies)
+- **Fall back to the global plugin (`mcp__plugin_asana_asana__*`)** for operations the local MCP doesn't support (delete task, create project, teams, users, typeahead, attachments, goals, portfolios, followers, allocations)
+- **Use curl for Asana REST API** when neither MCP covers the operation (sections CRUD, multi-homing, attachment uploads, custom fields, tags, batch API, webhooks)
+- See the `iagtm-asana` skill for the full tool routing table and curl patterns
 - **Never mark a task complete in Asana without proof artifacts**
 - Use the Asana MCP to read task details, not just the GitHub Issue
 - Custom fields on Asana tasks may contain routing hints (e.g., `agent: claude-code`)
@@ -313,6 +317,7 @@ iagtm-agent/
         ├── iagtm-menu-photographer/ → symlink to ../../skills/iagtm-menu-photographer
         ├── iagtm-staff-scheduler/ → symlink to ../../skills/iagtm-staff-scheduler
         ├── iagtm-finance/       → symlink to ../../skills/iagtm-finance
+        ├── iagtm-asana/        → symlink to ../../skills/iagtm-asana
         ├── skill-monitor/       → symlink to ../../skills/skill-monitor
         ├── (skill-creator is provided by the official Anthropic plugin, not in subrepo)
         ├── execute-task/        ← Workflow skill (committed)
