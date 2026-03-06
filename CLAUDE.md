@@ -44,35 +44,69 @@ A human or orchestrating agent provides direct instructions in the session.
 
 ## 3. Skills System
 
-Skills are structured knowledge files that define how to perform specific tasks.
-They live in the skills subrepo, mounted at: `./skills/`
+Skills are structured knowledge files that teach Claude how to handle specific operational tasks. Claude Code **auto-discovers skills** based on their descriptions — when a user's message matches a skill's keywords, Claude loads and follows that skill automatically.
 
-### Loading Skills
-Before starting any task, check if a relevant skill exists:
-```bash
-ls ./skills/
-cat ./skills/<skill-name>/SKILL.md
-```
+### How It Works
 
-Skills take precedence over general reasoning. If a skill exists for the task type, follow it.
+Skills are stored in `.claude/skills/` which is where Claude Code looks for them. Each skill has a `SKILL.md` file with YAML frontmatter containing a `name` and `description`. The description controls when Claude activates the skill.
+
+There are two types of skills in this project:
+
+| Type | Location | Invocation |
+|------|----------|------------|
+| **Domain skills** (menu, inventory, etc.) | `.claude/skills/<name>` → symlinked to `./skills/<name>` | Auto-triggered by Claude when your message matches the description keywords |
+| **Workflow skills** (execute-task, proof-of-work, check-tasks) | `.claude/skills/<name>/SKILL.md` | Manually invoked via `/execute-task`, `/proof-of-work`, `/check-tasks` |
+
+Domain skills take precedence over general reasoning. If a skill exists for the task type, Claude will follow it.
+
+### Available Domain Skills
+
+| Skill | Triggers On |
+|-------|------------|
+| `iagtm-menu` | Menu items, pricing, categories, Deliverect, Lightspeed POS, Uber Eats menus |
+| `iagtm-inventory` | Stock levels, suppliers, purchasing, Marketman, food cost |
+| `iagtm-uber-marketing` | Uber Eats ads, campaigns, ROAS, ad spend, offers, promotions |
+| `iagtm-menu-photographer` | Food photos, menu images, photography specs |
+| `iagtm-staff-scheduler` | Scheduling, shifts, rosters, Deputy, labour costs |
+| `iagtm-finance` | Revenue, P&L, profit, financial reports, cross-system consolidation |
+| `skill-monitor` | Skill health checks, improvement reviews |
+| `skill-creator` | Creating new skills |
+
+### Available Workflow Skills
+
+| Skill | Purpose |
+|-------|---------|
+| `/execute-task <issue-number>` | Full task execution workflow: read issue, plan, execute, proof, report, close |
+| `/proof-of-work` | Generate a structured proof-of-work summary for the current task |
+| `/check-tasks` | Query Asana for assigned tasks and sync status with GitHub Issues |
 
 ### Skills Subrepo
-The skills library is a Git submodule pointing to the real skills repository:
+
+The domain skills are maintained in a separate Git repository and included here as a submodule:
+
 ```
 iagtm-agent/
-└── skills/          ← git submodule: github.com/zirinisp/iagtm-skills
+├── skills/                ← Git submodule: github.com/zirinisp/iagtm-skills (source of truth)
+└── .claude/
+    └── skills/
+        ├── iagtm-menu     → ../../skills/iagtm-menu          (symlink)
+        ├── iagtm-finance   → ../../skills/iagtm-finance        (symlink)
+        ├── ...             → ...                               (symlinks)
+        ├── execute-task/   ← Workflow skill (committed directly)
+        ├── proof-of-work/  ← Workflow skill (committed directly)
+        └── check-tasks/    ← Workflow skill (committed directly)
 ```
+
+The symlinks let Claude Code discover the skills while keeping the subrepo as the single source of truth. The same subrepo also works with Claude Desktop via its own `sync-to-claude.sh` script.
 
 **Always sync before starting a task:**
 ```bash
 git submodule update --remote --merge skills
 ```
 
-This ensures you always have the latest skills before executing. The submodule tracks the `main` branch of `zirinisp/iagtm-skills`.
-
-To initialise on a fresh clone of the project:
+To initialise on a fresh clone:
 ```bash
-git submodule update --init --recursive
+bash setup/setup.sh
 ```
 
 ---
@@ -126,14 +160,15 @@ Playwright on Mac Mini controls Chrome directly — do not rely on the Chrome ex
 
 ```
 1. Read GitHub Issue fully
-2. Check ./skills/ for relevant skill
-3. Plan: write a brief execution plan as a GitHub comment
-4. Execute: follow skill or general best practice
-5. Document: log every action with timestamps
-6. Proof: capture screenshot/video of final state
-7. Report: post completion comment on GitHub Issue
-8. Sync: confirm Asana task is marked complete
+2. Plan: write a brief execution plan as a GitHub comment
+3. Execute: follow the auto-loaded skill or general best practice
+4. Document: log every action with timestamps
+5. Proof: capture screenshot/video of final state
+6. Report: post completion comment on GitHub Issue
+7. Sync: confirm Asana task is marked complete
 ```
+
+Or use `/execute-task <issue-number>` to run this workflow.
 
 ---
 
@@ -192,40 +227,37 @@ When in doubt: **do less, document more.**
 iagtm-agent/
 ├── CLAUDE.md              ← This file
 ├── .gitignore
-├── setup/                 ← Setup-related files
-│   └── setup.sh           ← Bootstrap script (run once on fresh machine)
+├── setup/
+│   └── setup.sh           ← Bootstrap script (creates symlinks + directories)
 ├── skills/                ← Git submodule: github.com/zirinisp/iagtm-skills
 ├── proof-of-work/         ← Artifacts per issue number
 │   └── <issue-number>/
 ├── docs/
 │   ├── n8n-mcp-config.json
-│   └── service-logins.md   ← How to authenticate to each external service
+│   └── service-logins.md  ← How to authenticate to each external service
 └── .claude/
-    └── commands/          ← Slash commands for Claude Code
-        ├── execute-task.md
-        ├── proof-of-work.md
-        └── check-tasks.md
+    └── skills/            ← Claude Code skill discovery directory
+        ├── iagtm-menu/          → symlink to ../../skills/iagtm-menu
+        ├── iagtm-inventory/     → symlink to ../../skills/iagtm-inventory
+        ├── iagtm-uber-marketing/ → symlink to ../../skills/iagtm-uber-marketing
+        ├── iagtm-menu-photographer/ → symlink to ../../skills/iagtm-menu-photographer
+        ├── iagtm-staff-scheduler/ → symlink to ../../skills/iagtm-staff-scheduler
+        ├── iagtm-finance/       → symlink to ../../skills/iagtm-finance
+        ├── skill-monitor/       → symlink to ../../skills/skill-monitor
+        ├── skill-creator/       → symlink to ../../skills/skill-creator
+        ├── execute-task/        ← Workflow skill (committed)
+        ├── proof-of-work/       ← Workflow skill (committed)
+        └── check-tasks/         ← Workflow skill (committed)
 ```
 
 ---
 
-## 12. Slash Commands
-
-These are defined in `.claude/commands/` and available during sessions:
-
-| Command | Purpose |
-|---------|---------|
-| `/execute-task <issue-number>` | Full task execution workflow: read issue, plan, execute, proof, report, close |
-| `/proof-of-work` | Generate a structured proof-of-work summary for the current task |
-| `/check-tasks` | Query Asana for assigned tasks and sync status with GitHub Issues |
-
----
-
-## 13. Bootstrap
+## 12. Bootstrap
 
 Run `bash setup/setup.sh` once on a fresh machine. It:
 - Verifies Node v20 is active
 - Checks required CLI tools (git, gh, node, npx, claude)
 - Clones the skills subrepo
-- Creates the `proof-of-work/` and `.claude/commands/` directories
+- Creates symlinks in `.claude/skills/` so Claude Code discovers all domain skills
+- Creates the `proof-of-work/` directory
 - Writes the n8n MCP config snippet to `docs/`

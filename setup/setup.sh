@@ -59,6 +59,22 @@ else
   echo "  ⚠️  No .gitmodules found — skipping"
 fi
 
+# ── 3b. Symlink skills into .claude/skills/ for Claude Code discovery ────────
+echo ""
+echo "▶ Linking skills for Claude Code..."
+CLAUDE_SKILLS_DIR="$AGENT_DIR/.claude/skills"
+mkdir -p "$CLAUDE_SKILLS_DIR"
+
+# Link each skill from the subrepo into .claude/skills/
+for skill_dir in "$AGENT_DIR"/skills/*/; do
+  skill_name=$(basename "$skill_dir")
+  # Skip non-skill directories (no SKILL.md)
+  if [ -f "$skill_dir/SKILL.md" ]; then
+    ln -sfn "../../skills/$skill_name" "$CLAUDE_SKILLS_DIR/$skill_name"
+    echo "  ✅ Linked $skill_name"
+  fi
+done
+
 # ── 4. Proof-of-work directory ─────────────────────────────────────────────────
 echo ""
 echo "▶ Ensuring proof-of-work directory exists..."
@@ -110,9 +126,9 @@ echo "║   Setup Complete                             ║"
 echo "╚══════════════════════════════════════════════╝"
 echo ""
 echo "Project root:    $AGENT_DIR"
-echo "Skills:          $AGENT_DIR/skills/"
+echo "Skills subrepo:  $AGENT_DIR/skills/"
+echo "Skills (Claude): $AGENT_DIR/.claude/skills/ (symlinked)"
 echo "Proof of work:   $AGENT_DIR/proof-of-work/"
-echo "Claude commands: $AGENT_DIR/.claude/commands/"
 echo "Docs:            $AGENT_DIR/docs/"
 echo ""
 echo "Next steps:"
