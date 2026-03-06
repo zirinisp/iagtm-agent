@@ -9,6 +9,11 @@ proof-of-work/**/
 credentials.json
 .mcp.json
 
+# Screenshots — must go in research/, not root
+/*.png
+/*.jpg
+/*.jpeg
+
 # OS files
 .DS_Store
 Thumbs.db
