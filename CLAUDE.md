@@ -70,6 +70,7 @@ Domain skills take precedence over general reasoning. If a skill exists for the 
 | `iagtm-menu-photographer` | Food photos, menu images, photography specs |
 | `iagtm-staff-scheduler` | Scheduling, shifts, rosters, Deputy, labour costs |
 | `iagtm-finance` | Revenue, P&L, profit, financial reports, cross-system consolidation |
+| `iagtm-reports` | Branded report generation (HTML, PDF, Excel, PowerPoint, Word) — layers IAGTM brand on official document skills |
 | `iagtm-asana` | Asana tasks, projects, sections, attachments, custom fields, tags, API, task lifecycle |
 | `skill-monitor` | Skill health checks, improvement reviews |
 | `skill-creator` | Creating new skills (official Anthropic plugin — see custom instructions below) |
@@ -114,6 +115,24 @@ The `skill-creator` plugin (official Anthropic plugin) is installed globally. Wh
    - List specific trigger keywords relevant to the domain
    - Reference the 6 London locations where applicable
    - Be "pushy" with triggers as the plugin recommends — list concrete keywords
+
+### Official Anthropic Plugins (Auto-Updating)
+
+Two plugin marketplaces are registered in `~/.claude/plugins/`:
+
+| Marketplace | Repo | Installed Plugins |
+|-------------|------|-------------------|
+| `claude-plugins-official` | `anthropics/claude-plugins-official` | `skill-creator`, `asana`, `frontend-design` |
+| `anthropic-agent-skills` | `anthropics/skills` | `document-skills` (pdf, xlsx, pptx, docx), `example-skills` (canvas-design, brand-guidelines, etc.) |
+
+These provide the **HOW** — code patterns, library usage, and design principles. Our `iagtm-reports` skill provides the **WHAT** — IAGTM brand colors, templates, and layout conventions that layer on top.
+
+**Python dependencies** (for pdf/xlsx/pptx/docx skills):
+```bash
+python3 -m pip install reportlab pypdf pdfplumber openpyxl python-pptx
+```
+
+**To update plugins:** Pull the marketplace repos in `~/.claude/plugins/marketplaces/`.
 
 ### Skills Subrepo
 
@@ -303,6 +322,9 @@ iagtm-agent/
 │   ├── setup.sh           ← Bootstrap script (creates symlinks + directories)
 │   └── chrome-cdp.sh      ← Chrome CDP lifecycle manager (multi-agent browser)
 ├── skills/                ← Git submodule: github.com/zirinisp/iagtm-skills
+├── reports/
+│   ├── templates/         ← Reusable HTML report templates
+│   └── output/            ← Generated reports (gitignored)
 ├── proof-of-work/         ← Artifacts per issue number
 │   └── <issue-number>/
 ├── docs/
@@ -317,9 +339,10 @@ iagtm-agent/
         ├── iagtm-menu-photographer/ → symlink to ../../skills/iagtm-menu-photographer
         ├── iagtm-staff-scheduler/ → symlink to ../../skills/iagtm-staff-scheduler
         ├── iagtm-finance/       → symlink to ../../skills/iagtm-finance
-        ├── iagtm-asana/        → symlink to ../../skills/iagtm-asana
+        ├── iagtm-reports/       → symlink to ../../skills/iagtm-reports
+        ├── iagtm-asana/         → symlink to ../../skills/iagtm-asana
         ├── skill-monitor/       → symlink to ../../skills/skill-monitor
-        ├── (skill-creator is provided by the official Anthropic plugin, not in subrepo)
+        ├── (skill-creator, frontend-design, document-skills — official Anthropic plugins)
         ├── execute-task/        ← Workflow skill (committed)
         ├── proof-of-work/       ← Workflow skill (committed)
         ├── check-tasks/         ← Workflow skill (committed)
