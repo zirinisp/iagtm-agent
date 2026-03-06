@@ -15,3 +15,4 @@ Thumbs.db
 
 # Node
 node_modules/
+.playwright-mcp/
