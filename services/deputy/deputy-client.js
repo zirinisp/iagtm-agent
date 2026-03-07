@@ -12,6 +12,27 @@ if (!DEPUTY_API_BASE || !DEPUTY_TOKEN) {
   throw new Error('Missing DEPUTY_API_BASE or DEPUTY_TOKEN in environment');
 }
 
+/**
+ * Mapping from Company (location) IDs to OperationalUnit (area) IDs.
+ * Rosters and Timesheets link to areas, not locations — use this to filter by location.
+ */
+export const LOCATION_AREAS = {
+  1:  [5, 9, 22, 33],      // Paddington BOH
+  4:  [18, 21],             // Remote
+  5:  [25, 35, 38],         // Shoreditch
+  6:  [26, 27, 32, 43],     // Paddington FOH
+  7:  [34, 36, 37],         // Brent
+  8:  [40, 41, 42],         // Wandsworth
+  9:  [48, 49, 50, 51],     // Peckham
+  11: [52, 53, 54],         // Tallinn
+  12: [55, 56],             // Chiswick
+};
+
+/** Get all area IDs for a location. For "Paddington" (both FOH+BOH), pass [1, 6]. */
+export function getAreaIdsForLocation(locationId) {
+  return LOCATION_AREAS[locationId] || [];
+}
+
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
@@ -151,7 +172,9 @@ export async function getRosters(startDate, endDate, locationId) {
     s2: { field: 'EndTime', data: toUnix(endDate), type: 'le' },
   };
   if (locationId) {
-    search.s3 = { field: 'Company', data: locationId, type: 'eq' };
+    const areaIds = getAreaIdsForLocation(locationId);
+    if (areaIds.length === 0) throw new Error(`Unknown location ID: ${locationId}`);
+    search.s3 = { field: 'OperationalUnit', data: areaIds, type: 'in' };
   }
   return resourceQuery('Roster', {
     search,
@@ -207,7 +230,9 @@ export async function getTimesheets(startDate, endDate, locationId) {
     s2: { field: 'StartTime', data: toUnix(endDate), type: 'le' },
   };
   if (locationId) {
-    search.s3 = { field: 'OperationalUnit', data: locationId, type: 'eq' };
+    const areaIds = getAreaIdsForLocation(locationId);
+    if (areaIds.length === 0) throw new Error(`Unknown location ID: ${locationId}`);
+    search.s3 = { field: 'OperationalUnit', data: areaIds, type: 'in' };
   }
   return resourceQuery('Timesheet', {
     search,
@@ -259,8 +284,8 @@ export async function approveTimesheet(timesheetId) {
 export async function getLeave(startDate, endDate) {
   return resourceQuery('Leave', {
     search: {
-      s1: { field: 'DateStart', data: toUnix(startDate), type: 'ge' },
-      s2: { field: 'DateStart', data: toUnix(endDate), type: 'le' },
+      s1: { field: 'Start', data: toUnix(startDate), type: 'ge' },
+      s2: { field: 'Start', data: toUnix(endDate), type: 'le' },
     },
     sort: { DateStart: 'asc' },
     max: 500,
