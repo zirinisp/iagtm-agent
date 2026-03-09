@@ -1,6 +1,5 @@
-# Proof-of-work artifacts
-proof-of-work/**/
-!proof-of-work/.gitkeep
+# Task folders (symlinked to Google Drive Shared Drive — not tracked in git)
+tasks/
 
 # Environment and secrets
 .env

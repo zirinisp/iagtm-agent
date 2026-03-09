@@ -262,12 +262,16 @@ Playwright on Mac Mini uses CDP mode for multi-agent access — do not use exten
 
 ```
 1. Read GitHub Issue fully
-2. Plan: write a brief execution plan as a GitHub comment
-3. Execute: follow the auto-loaded skill or general best practice
-4. Document: log every action with timestamps
-5. Proof: capture screenshot/video of final state
-6. Report: post completion comment on GitHub Issue
-7. Sync: confirm Asana task is marked complete
+2. Create task folder: tasks/YYYY-MM-DD-HHMM-description/
+3. Check services/REGISTRY.md for existing scripts
+4. Plan: write a brief execution plan as a GitHub comment
+5. Execute: follow the auto-loaded skill or general best practice
+6. Document: log every action with timestamps in task folder README.md
+7. Proof: capture screenshot/video → tasks/<folder>/screenshots/
+8. If new reusable scripts were created, move to services/ and update REGISTRY.md
+9. Get Google Drive link: node services/google-drive/gdrive-client.js "<folder-name>"
+10. Report: post completion comment on GitHub Issue (with Drive link)
+11. Sync: confirm Asana task is marked complete (with Drive link)
 ```
 
 Or use `/execute-task <issue-number>` to run this workflow.
@@ -387,7 +391,7 @@ Run `bash setup/setup.sh` once on a fresh machine. It:
 - Checks required CLI tools (git, gh, node, npx, claude)
 - Clones the skills subrepo
 - Creates symlinks in `.claude/skills/` so Claude Code discovers all domain skills
-- Creates the `proof-of-work/` directory
+- Creates the `tasks/` symlink to Google Drive Shared Drive
 - Writes the n8n MCP config snippet to `docs/`
 
 After setup, start the CDP Chrome for multi-agent browser access:
