@@ -72,6 +72,7 @@ Domain skills take precedence over general reasoning. If a skill exists for the 
 | `iagtm-finance` | Revenue, P&L, profit, financial reports, cross-system consolidation |
 | `iagtm-reports` | Branded report generation (HTML, PDF, Excel, PowerPoint, Word) — layers IAGTM brand on official document skills |
 | `iagtm-asana` | Asana tasks, projects, sections, attachments, custom fields, tags, API, task lifecycle |
+| `iagtm-scripts` | Script registry, reusable scripts, `services/REGISTRY.md`, creating/finding/organizing automation scripts |
 | `skill-monitor` | Skill health checks, improvement reviews |
 | `skill-creator` | Creating new skills (official Anthropic plugin — see custom instructions below) |
 
@@ -165,21 +166,38 @@ bash setup/setup.sh
 
 ---
 
-## 4. Proof-of-Work Requirements
+## 4. Task Folders & Proof-of-Work
+
+### Task Folders
+
+Every piece of work gets its own folder in `tasks/`:
+
+```
+tasks/YYYY-MM-DD-HHMM-description/
+├── README.md        ← What was done, links to Asana/GitHub issue, proof-of-work summary
+├── screenshots/     ← Screenshots captured during the task
+└── output/          ← Generated files (PDFs, XLSX, HTML, data files)
+```
+
+The README.md in each task folder IS the proof-of-work — it contains the action log, results, and links to artifacts.
+
+### Proof-of-Work Requirements
 
 Every completed task MUST produce proof artifacts. This is non-negotiable.
 
 | Artifact | Required | Notes |
 |----------|----------|-------|
-| Action log | Always | Timestamped list of every action taken |
+| Action log | Always | Timestamped list of every action taken (in task README.md) |
 | Final state screenshot | Always | Screenshot of end state via Playwright |
 | Error log | If errors occurred | What failed and how it was resolved |
 | Video recording | For browser tasks | Screen recording of the session |
 | Output files | If applicable | Any files created/modified |
 
-Artifacts are stored in: `./proof-of-work/<github-issue-number>/`
-
 After completion, post a summary comment on the GitHub Issue with artifact links.
+
+### Reusable Scripts
+
+When creating or reusing data scripts, the `iagtm-scripts` skill manages the `services/` directory and `services/REGISTRY.md`. Always check the registry before writing a new script, and register reusable scripts at task completion.
 
 ---
 
@@ -305,7 +323,7 @@ Asana is the source of truth for task status. Rules:
 A well-executed task ends with:
 1. GitHub Issue closed with a structured completion comment
 2. Asana task marked complete with proof artifact links
-3. `./proof-of-work/<issue-number>/` folder containing all artifacts
+3. `./tasks/YYYY-MM-DD-HHMM-description/` folder containing all artifacts
 4. No open questions or incomplete sub-tasks
 
 When in doubt: **do less, document more.**
@@ -322,11 +340,20 @@ iagtm-agent/
 │   ├── setup.sh           ← Bootstrap script (creates symlinks + directories)
 │   └── chrome-cdp.sh      ← Chrome CDP lifecycle manager (multi-agent browser)
 ├── skills/                ← Git submodule: github.com/zirinisp/iagtm-skills
+├── services/              ← Reusable scripts & API clients (the "toolbox")
+│   ├── REGISTRY.md        ← Script index — check before writing new scripts
+│   ├── lightspeed/        ← Lightspeed POS API client and reports
+│   ├── xero/              ← Xero accounting API client and P&L fetchers
+│   ├── deputy/            ← Deputy scheduling API client
+│   └── reports/           ← Report generators that combine multi-service data
+├── tasks/                 ← Task-based folders (one per piece of work)
+│   └── YYYY-MM-DD-HHMM-description/
+│       ├── README.md      ← Proof-of-work: what was done, action log, links
+│       ├── screenshots/   ← Screenshots captured during the task
+│       └── output/        ← Generated files (PDFs, XLSX, HTML, data)
+├── research/              ← Investigation & data gathering (organized by topic)
 ├── reports/
-│   ├── templates/         ← Reusable HTML report templates
-│   └── output/            ← Generated reports (gitignored)
-├── proof-of-work/         ← Artifacts per issue number
-│   └── <issue-number>/
+│   └── templates/         ← Reusable HTML/brand report templates
 ├── docs/
 │   ├── n8n-mcp-config.json
 │   └── service-logins.md  ← How to authenticate to each external service
@@ -341,6 +368,7 @@ iagtm-agent/
         ├── iagtm-finance/       → symlink to ../../skills/iagtm-finance
         ├── iagtm-reports/       → symlink to ../../skills/iagtm-reports
         ├── iagtm-asana/         → symlink to ../../skills/iagtm-asana
+        ├── iagtm-scripts/       → symlink to ../../skills/iagtm-scripts
         ├── skill-monitor/       → symlink to ../../skills/skill-monitor
         ├── (skill-creator, frontend-design, document-skills — official Anthropic plugins)
         ├── execute-task/        ← Workflow skill (committed)
