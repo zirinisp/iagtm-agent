@@ -177,6 +177,8 @@ security add-generic-password -a "<username>" -s "<service-name>" -w "<password>
 | `marketman-buyer` | `Michael_AI` | Marketman |
 | `deliverect` | `paz.n8n@gmail.com` | Deliverect |
 | `lightspeed` | `paz.n8n@gmail.com` | Lightspeed POS |
+| `google` | `paz.n8n@gmail.com` | Google/Gmail (for OTP flows) |
+| `macos-login` | `michaelai` | macOS login (for keychain unlock) |
 
 ## Google Account
 
@@ -192,8 +194,18 @@ https://mail.google.com/mail/u/0/
 ```
 Chrome on Paddington is signed into `paz.n8n@gmail.com` — Gmail works via Playwright.
 
+## Keychain Management
+
+The keychain may auto-lock after restarts or sleep. Agents can self-unlock:
+```bash
+# Read the macOS password and unlock
+MACOS_PW=$(security find-generic-password -s "macos-login" -w)
+security unlock-keychain -p "$MACOS_PW" ~/Library/Keychains/login.keychain-db
+```
+Auto-lock timeout has been disabled (`security set-keychain-settings`) so this should rarely be needed.
+
 ## Known Limitations
 
-- **Uber login**: RESOLVED — Use "Login with email" OTP flow (not Google SSO). Enter email → Continue → "Login with email" → read OTP from Gmail browser → enter digits. Bypasses Google SSO popup entirely. Fully automatable via Playwright.
+- **Uber login**: RESOLVED — Use "Login with email" OTP flow (not Google SSO). Enter email → Continue → "Login with email" → read OTP from Gmail browser → enter digits. Bypasses Google SSO popup entirely. Fully automatable via Playwright. Google password for Gmail login stored in Keychain (service: `google`).
 - **Asana plugin MCP**: Token expires periodically. The Claude AI Asana MCP works as a reliable fallback.
 - **Gmail MCP**: Connected to `info@paz-labs.com`. For `paz.n8n@gmail.com` emails, use browser Gmail via Playwright.
