@@ -178,7 +178,7 @@ security add-generic-password -a "<username>" -s "<service-name>" -w "<password>
 | `deliverect` | `paz.n8n@gmail.com` | Deliverect |
 | `lightspeed` | `paz.n8n@gmail.com` | Lightspeed POS |
 | `google` | `paz.n8n@gmail.com` | Google/Gmail (for OTP flows) |
-| `macos-login` | `michaelai` | macOS login (for keychain unlock) |
+| `macos-login` | `michaelai` | macOS login (for keychain unlock) — password: `auto1234` |
 
 ## Google Account
 
