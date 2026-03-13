@@ -262,16 +262,17 @@ Playwright on Mac Mini uses CDP mode for multi-agent access — do not use exten
 
 ```
 1. Read GitHub Issue fully
-2. Create task folder: tasks/YYYY-MM-DD-HHMM-description/
-3. Check services/REGISTRY.md for existing scripts
-4. Plan: write a brief execution plan as a GitHub comment
-5. Execute: follow the auto-loaded skill or general best practice
-6. Document: log every action with timestamps in task folder README.md
-7. Proof: capture screenshot/video → tasks/<folder>/screenshots/
-8. If new reusable scripts were created, move to services/ and update REGISTRY.md
-9. Get Google Drive link: node services/google-drive/gdrive-client.js "<folder-name>"
-10. Report: post completion comment on GitHub Issue (with Drive link)
-11. Sync: confirm Asana task is marked complete (with Drive link)
+2. Verify current date/time: run `date '+%Y-%m-%d %H:%M %Z'` — NEVER trust the session's injected currentDate
+3. Create task folder: tasks/YYYY-MM-DD-HHMM-description/ (using the verified date)
+4. Check services/REGISTRY.md for existing scripts
+5. Plan: write a brief execution plan as a GitHub comment
+6. Execute: follow the auto-loaded skill or general best practice
+7. Document: log every action with timestamps in task folder README.md
+8. Proof: capture screenshot/video → tasks/<folder>/screenshots/
+9. If new reusable scripts were created, move to services/ and update REGISTRY.md
+10. Get Google Drive link: node services/google-drive/gdrive-client.js "<folder-name>"
+11. Report: post completion comment on GitHub Issue (with Drive link)
+12. Sync: confirm Asana task is marked complete (with Drive link)
 ```
 
 Or use `/execute-task <issue-number>` to run this workflow.
@@ -319,6 +320,7 @@ Asana is the source of truth for task status. Rules:
 | Uber Eats sessions expire quickly | Use email OTP re-login flow (automated — see services.md) |
 | CDP Chrome not running | Run `bash setup/chrome-cdp.sh start` before browser work |
 | Sessions expired in CDP Chrome | Ask user to log in on their Chrome, then run `bash setup/chrome-cdp.sh sync` |
+| `currentDate` in context is stale | Claude Code injects a date at session start that may be wrong by the time work begins. **Always run `date` before any date-sensitive work** (reports, API queries, task folder naming). Never trust the injected date. |
 
 ---
 
