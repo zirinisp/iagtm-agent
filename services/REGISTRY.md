@@ -2,7 +2,7 @@
 
 Reusable scripts and API clients. **Check here before writing a new script.**
 
-Last updated: 2026-03-09
+Last updated: 2026-03-13
 
 ---
 
@@ -58,6 +58,26 @@ Last updated: 2026-03-09
 |--------|---------|-------|--------|---------|
 | `gdrive-client.js` | Google Drive API client — folder lookup and link generation for Shared Drive | Import as module or CLI: `node gdrive-client.js <folder-name>` | Google Drive URL | 2026-03-09 |
 | `gdrive-auth.js` | One-time OAuth2 authorization flow for Google Drive API | None (opens browser) | Stores tokens to `tokens.json` | 2026-03-09 |
+
+## google-workspace/ (gws CLI)
+
+Google Workspace CLI (`gws` v0.13.2) wrapper providing access to Drive, Sheets, Docs, Gmail, and Calendar.
+Auth: `paz.n8n@gmail.com` via encrypted OAuth2 credentials in `~/.config/gws/`.
+
+| Script | Purpose | Input | Output | Created |
+|--------|---------|-------|--------|---------|
+| `gws-wrapper.js` | Core wrapper — executes gws commands, parses JSON, retries on rate limits | Import: `gws(command, options)` or CLI for status check | JSON objects | 2026-03-13 |
+| `sheets-helpers.js` | Google Sheets read/write/append/create | Import or CLI: `node sheets-helpers.js create "Title"` | Spreadsheet data/URLs | 2026-03-13 |
+| `docs-helpers.js` | Google Docs create/read/insert text | Import or CLI: `node docs-helpers.js create "Title" "content"` | Document data/URLs | 2026-03-13 |
+| `drive-helpers.js` | Drive file upload, folder creation, listing (NOT for task folders) | Import or CLI: `node drive-helpers.js upload <file> [folderId]` | File/folder URLs | 2026-03-13 |
+| `gmail-helpers.js` | Gmail search, read messages, OTP extraction | Import or CLI: `node gmail-helpers.js otp` | Messages/OTP codes | 2026-03-13 |
+| `calendar-helpers.js` | Calendar event listing and creation | Import or CLI: `node calendar-helpers.js list` | Event data | 2026-03-13 |
+
+**Important notes:**
+- Drive upload is for non-task content. Task folders sync via Google Drive desktop app — do NOT upload to them.
+- Gmail `getLatestOTP()` can replace Playwright-based OTP reading for login flows.
+- gws is pre-v1.0 (not officially supported by Google). The wrapper isolates all calls for easy updates.
+- Update gws: `cd services/google-workspace && npm update @googleworkspace/cli`
 
 ## reports/output/ (one-off scripts — not migrated)
 

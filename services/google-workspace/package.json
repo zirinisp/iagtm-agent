@@ -1,0 +1,9 @@
+{
+  "name": "iagtm-google-workspace",
+  "version": "1.0.0",
+  "description": "Google Workspace CLI wrapper for IAGTM agent system",
+  "type": "module",
+  "dependencies": {
+    "@googleworkspace/cli": "^0.13.2"
+  }
+}
