@@ -30,7 +30,20 @@ TEXT_MUTED = HexColor('#8E95A9')
 WHITE = colors.white
 
 # Load data
-with open('/tmp/pad-data.json') as f:
+import sys
+import os
+
+if len(sys.argv) > 1:
+    input_path = sys.argv[1]
+else:
+    input_path = '/tmp/pad-data.json'
+
+if not os.path.exists(input_path):
+    print(f"Error: Input file not found: {input_path}", file=sys.stderr)
+    print(f"Usage: {sys.argv[0]} <input.json> [output.pdf]", file=sys.stderr)
+    sys.exit(1)
+
+with open(input_path) as f:
     data = json.load(f)
 
 daily = data['dailyData']
@@ -41,7 +54,11 @@ totalHrs = data['totalHrs']
 totalPct = data['totalPct']
 
 # Build PDF
-output = '/Users/michaelai/claude-work-folder/iagtm-agent/reports/output/2026-03-07-paddington-turnover-vs-labour.pdf'
+if len(sys.argv) > 2:
+    output = sys.argv[2]
+else:
+    output = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'reports', 'output', 'turnover-vs-labour.pdf')
+os.makedirs(os.path.dirname(os.path.abspath(output)), exist_ok=True)
 
 doc = SimpleDocTemplate(output, pagesize=A4,
     leftMargin=25*mm, rightMargin=25*mm, topMargin=22*mm, bottomMargin=18*mm)

@@ -93,7 +93,13 @@ grand_oncost = sum(t['oncost'] for t in location_totals.values())
 grand_hours = sum(t['hours'] for t in location_totals.values())
 
 # Build PDF
-output_path = '/Users/michaelai/claude-work-folder/iagtm-agent/reports/output/2026-03-07-staff-cost-weekly-report.pdf'
+import sys
+import os
+if len(sys.argv) > 1:
+    output_path = sys.argv[1]
+else:
+    output_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'reports', 'output', 'staff-cost-weekly-report.pdf')
+os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
 
 doc = SimpleDocTemplate(
     output_path,

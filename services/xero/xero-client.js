@@ -15,6 +15,12 @@ const {
   XERO_API_BASE,
 } = process.env;
 
+const requiredEnv = { XERO_CLIENT_ID, XERO_CLIENT_SECRET, XERO_TOKEN_URL, XERO_API_BASE };
+const missingEnv = Object.entries(requiredEnv).filter(([, v]) => !v).map(([k]) => k);
+if (missingEnv.length) {
+  throw new Error(`Missing required env vars in xero/.env: ${missingEnv.join(', ')}`);
+}
+
 /**
  * Load tokens from tokens.json.
  * Throws if file doesn't exist (user needs to run xero-auth.js first).

@@ -73,6 +73,8 @@ Domain skills take precedence over general reasoning. If a skill exists for the 
 | `iagtm-reports` | Branded report generation (HTML, PDF, Excel, PowerPoint, Word) — layers IAGTM brand on official document skills |
 | `iagtm-asana` | Asana tasks, projects, sections, attachments, custom fields, tags, API, task lifecycle |
 | `iagtm-scripts` | Script registry, reusable scripts, `services/REGISTRY.md`, creating/finding/organizing automation scripts |
+| `iagtm-browser` | Browser automation, Playwright MCP, CDP, web scraping, screenshots, login flows |
+| `iagtm-menu-eval` | Menu item health evaluation, scoring, performance review, sales vs margin analysis |
 | `skill-monitor` | Skill health checks, improvement reviews |
 | `skill-creator` | Creating new skills (official Anthropic plugin — see custom instructions below) |
 

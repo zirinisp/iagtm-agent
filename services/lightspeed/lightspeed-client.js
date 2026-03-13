@@ -13,6 +13,12 @@ const {
   LIGHTSPEED_API_BASE,
 } = process.env;
 
+const requiredEnv = { LIGHTSPEED_CLIENT_ID, LIGHTSPEED_CLIENT_SECRET, LIGHTSPEED_TOKEN_URL, LIGHTSPEED_API_BASE };
+const missing = Object.entries(requiredEnv).filter(([, v]) => !v).map(([k]) => k);
+if (missing.length) {
+  throw new Error(`Missing required env vars in lightspeed/.env: ${missing.join(', ')}`);
+}
+
 // Location IDs (blIds)
 export const LOCATIONS = {
   paddington: 243172458364930,
