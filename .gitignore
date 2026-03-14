@@ -17,6 +17,9 @@ tokens.json
 # Generated reports
 reports/output/
 
+# Skill evaluation workspaces
+evaluations/
+
 # Auto-generated logs
 docs/plugin-updates.log
 
