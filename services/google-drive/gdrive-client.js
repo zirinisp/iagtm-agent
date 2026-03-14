@@ -70,7 +70,7 @@ async function refreshAccessToken(tokens) {
   return updated;
 }
 
-async function getAccessToken() {
+export async function getAccessToken() {
   let tokens = await loadTokens();
   const expiresAt = (tokens.obtained_at || 0) + (tokens.expires_in || 3600) * 1000;
   if (Date.now() > expiresAt - 60000) {

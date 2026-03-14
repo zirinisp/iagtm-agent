@@ -16,7 +16,9 @@ Execute GitHub Issue #$ARGUMENTS using the full task execution workflow.
 5. Check `services/REGISTRY.md` for any existing scripts that may help
 6. Execute the task following the skill or general best practice
 7. Log every action with timestamps in the task folder's `README.md`
-8. Save all output files to `tasks/<folder-name>/output/`
+8. Save output to the appropriate format:
+   - **Human-facing deliverables** (emails, proposals, summaries, data tables): create a Google Doc or Sheet via `services/google-workspace/deliverables.js` — NOT a `.md` file. Post the returned URL to Asana and the GitHub Issue.
+   - **Agent-internal files** (action logs, scripts, intermediate data): save as files to `tasks/<folder-name>/output/`
 9. Capture a screenshot of the final state via Playwright → `tasks/<folder-name>/screenshots/`
 10. If new reusable scripts were created, move them to `services/` and update `services/REGISTRY.md`
 11. Get the Google Drive link:

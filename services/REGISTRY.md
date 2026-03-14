@@ -73,8 +73,11 @@ Auth: `paz.n8n@gmail.com` via encrypted OAuth2 credentials in `~/.config/gws/`.
 | `gmail-helpers.js` | Gmail search, read messages, OTP extraction | Import or CLI: `node gmail-helpers.js otp` | Messages/OTP codes | 2026-03-13 |
 | `calendar-helpers.js` | Calendar event listing and creation | Import or CLI: `node calendar-helpers.js list` | Event data | 2026-03-13 |
 
+| `deliverables.js` | High-level deliverables service — create Google Docs from markdown, formatted Sheets, read/resolve comments | Import: `createGoogleDoc`, `createGoogleSheet`, `getDocText`, `getDocComments`, `resolveComment`, `updateGoogleDoc` | Doc/Sheet URLs, text content | 2026-03-14 |
+
 **Important notes:**
 - Drive upload is for non-task content. Task folders sync via Google Drive desktop app — do NOT upload to them.
+- **For human-facing deliverables** (emails, proposals, reports, financial tables): use `deliverables.js` — NOT `.md` files. `.md` files do not render in Google Drive.
 - Gmail `getLatestOTP()` can replace Playwright-based OTP reading for login flows.
 - gws is pre-v1.0 (not officially supported by Google). The wrapper isolates all calls for easy updates.
 - Update gws: `cd services/google-workspace && npm update @googleworkspace/cli`
