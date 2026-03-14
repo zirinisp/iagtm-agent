@@ -364,8 +364,6 @@ iagtm-agent/
 │       ├── screenshots/   ← Screenshots captured during the task
 │       └── output/        ← Generated files (PDFs, XLSX, HTML, data)
 ├── research/              ← Investigation & data gathering (organized by topic)
-├── reports/
-│   └── templates/         ← Reusable HTML/brand report templates
 ├── docs/
 │   ├── n8n-mcp-config.json
 │   └── service-logins.md  ← How to authenticate to each external service
