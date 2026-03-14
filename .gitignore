@@ -17,6 +17,9 @@ tokens.json
 # Generated reports
 reports/output/
 
+# Auto-generated logs
+docs/plugin-updates.log
+
 # OS files
 .DS_Store
 Thumbs.db
