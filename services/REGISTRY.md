@@ -15,6 +15,7 @@ Last updated: 2026-03-14
 | `reauth.js` | Re-authenticate Lightspeed via CDP browser when token expires | Called automatically by client on 403 | Refreshes stored token | 2026-03-06 |
 | `daily-sales-report.js` | Daily revenue summary by location | `--date YYYY-MM-DD` (optional) | Console output | 2026-03-09 |
 | `chiswick-sales.js` | Chiswick-specific sales data | None | Console output | 2026-03-09 |
+| `tgtg-sales.js` | TooGoodToGo sales analysis — dynamic TGTG product discovery and sales data | Module: `getTgtgSales`, `getTgtgProducts`, `getTgtgSummary`. CLI: `--from`, `--to`, `--location` | JSON data / Console summary | 2026-03-14 |
 | `test-all-endpoints.js` | Tests all known Lightspeed API endpoints | None | Console — pass/fail per endpoint | 2026-03-06 |
 | `test-api.js` | Quick API connectivity test | None | Console | 2026-03-06 |
 
