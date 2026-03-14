@@ -2,7 +2,7 @@
 
 Reusable scripts and API clients. **Check here before writing a new script.**
 
-Last updated: 2026-03-13
+Last updated: 2026-03-14
 
 ---
 
@@ -74,6 +74,7 @@ Auth: `paz.n8n@gmail.com` via encrypted OAuth2 credentials in `~/.config/gws/`.
 | `calendar-helpers.js` | Calendar event listing and creation | Import or CLI: `node calendar-helpers.js list` | Event data | 2026-03-13 |
 
 | `deliverables.js` | High-level deliverables service — create Google Docs from markdown, formatted Sheets, read/resolve comments | Import: `createGoogleDoc`, `createGoogleSheet`, `getDocText`, `getDocComments`, `resolveComment`, `updateGoogleDoc` | Doc/Sheet URLs, text content | 2026-03-14 |
+| `gdocs-report.js` | Branded Google Docs report generator — creates professionally styled docs with IAGTM navy/gold branding, native tables with styled headers, alternating rows, gold subtitles | Import: `createBrandedReport(title, sections, options)` or CLI: `node gdocs-report.js test` | `{ documentId, url }` | 2026-03-14 |
 
 **Important notes:**
 - Drive upload is for non-task content. Task folders sync via Google Drive desktop app — do NOT upload to them.

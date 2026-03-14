@@ -218,6 +218,10 @@ When creating or reusing data scripts, the `iagtm-scripts` skill manages the `se
 | n8n | Workflow automation | `https://n8n-mcp-michael.paz-labs.com/mcp` |
 | Playwright | Browser control | CDP via `http://localhost:9222` (multi-agent) |
 
+### Scheduled Jobs
+
+System cron jobs run on this Mac Mini. See `docs/cron-jobs.md` for details, or `crontab -l` to inspect.
+
 ### Node.js
 Always use Node v20. If running npx commands:
 ```bash
